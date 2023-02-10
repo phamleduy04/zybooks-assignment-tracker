@@ -1,0 +1,35 @@
+{
+  "name": "zybooks-assignment-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/src/Bot.js",
+  "scripts": {
+    "start": "ts-node src/Bot.ts",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phamleduy04/zybooks-assignment-tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/phamleduy04/zybooks-assignment-tracker/issues"
+  },
+  "homepage": "https://github.com/phamleduy04/zybooks-assignment-tracker#readme",
+  "devDependencies": {
+    "@types/node": "^18.13.0",
+    "@typescript-eslint/eslint-plugin": "^5.51.0",
+    "@typescript-eslint/parser": "^5.51.0",
+    "eslint": "^8.33.0",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3"
+  }
+}
