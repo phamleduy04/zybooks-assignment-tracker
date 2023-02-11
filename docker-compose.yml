@@ -1,0 +1,9 @@
+version: '3.6'
+
+services:
+  zybooks-bot: 
+    image: ghcr.io/phamleduy04/discord-confession-bot:alpine
+    container_name: zybooks-assignment-tracker-bot
+    restart: always
+    env_file: 
+      - .env
