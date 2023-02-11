@@ -22,8 +22,9 @@ export const event: Event = {
 }
 
 async function fetchAssignments(client: Client, page: Page) {
+    console.log('Fetching assignments...');
     const assignments = (await broswer.getAssignmentData(page)).filter(assignment => assignment.due > dayjs().unix());
-    if (!_.isEmpty(_.xor(assignments, AssignmentCache))) await sendAssignments(client, assignments);
+    if (!_.isEqual(assignments, AssignmentCache)) await sendAssignments(client, assignments);
     AssignmentCache = assignments;
     setInterval(() => fetchAssignments(client, page), 1000 * 60 * 10);
 }
