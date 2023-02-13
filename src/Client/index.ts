@@ -23,7 +23,7 @@ class Bot extends Client {
 
         //Event Handler
         const eventPath = path.join(__dirname, '..', 'Events');
-        readdirSync(eventPath).forEach(async file => {
+        readdirSync(eventPath).forEach(async (file) => {
             const { event } = await import(`${eventPath}/${file}`);
             this.events.set(event.name, event);
             this.on(event.name, event.run.bind(null, this));
@@ -63,8 +63,6 @@ class Bot extends Client {
         //     console.log(`Bot is ready! ${this.user?.tag}`);
         // });
     }
-
-
 }
 
 export default Bot;

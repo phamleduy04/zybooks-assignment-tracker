@@ -10,9 +10,6 @@ import db from '../Database';
 import type { Assignment } from '../Browser';
 import type { Page } from 'puppeteer';
 
-
-let AssignmentCache: Assignment[] = [];
-
 export const event: Event = {
     name: 'ready',
     run: async (client: Client) => {
@@ -21,13 +18,13 @@ export const event: Event = {
         const page = await broswer.launch();
         log.info('Browser launched!');
         await fetchAssignments(client, page);
-    }
-}
+    },
+};
 
 async function fetchAssignments(client: Client, page: Page) {
     log.info('Fetching assignments...');
-    const AssignmentCache = await db.get('zybooks') || [];
-    const assignments = (await broswer.getAssignmentData(page)).filter(assignment => assignment.due > dayjs().unix());
+    const AssignmentCache = (await db.get('zybooks')) || [];
+    const assignments = (await broswer.getAssignmentData(page)).filter((assignment) => assignment.due > dayjs().unix());
     if (!_.isEqual(assignments, AssignmentCache)) await sendAssignments(client, assignments);
     await db.set('zybooks', assignments);
     setInterval(() => fetchAssignments(client, page), 1000 * 60 * 10);
@@ -49,9 +46,12 @@ function getMultipleEmbeds(assignment: Assignment[]) {
     const embeds = [];
     for (let i = 0; i < assignment.length; i++) {
         const embed = new EmbedBuilder().setTitle('ZyBooks Assignments');
-        embed.addFields([ { name: 'Assignment name', value: assignment[i].title }, { name: 'Due date', value: `<t:${assignment[i].due}:R>` }])
+        embed.addFields([
+            { name: 'Assignment name', value: assignment[i].title },
+            { name: 'Due date', value: `<t:${assignment[i].due}:R>` },
+        ]);
         embeds.push(embed);
     }
-    
+
     return embeds;
 }

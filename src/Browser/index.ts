@@ -20,12 +20,12 @@ puppeteer.use(StealthPlugin());
 puppeteer.use(RandomUserAgent());
 
 interface Assignment {
-    title: string,
-    due: number
+    title: string;
+    due: number;
 }
 
 const getAssignmentData = async (page: Page) => {
-    const assignments: Assignment[]  = [];
+    const assignments: Assignment[] = [];
     await page.waitForSelector('.assignment-title');
 
     const $ = cheerio.load(await page.content());
@@ -38,7 +38,7 @@ const getAssignmentData = async (page: Page) => {
         assignments.push({ title, due });
     });
     return assignments;
-}
+};
 
 const launch = async () => {
     const browser: Browser = await puppeteer.launch({
@@ -54,13 +54,12 @@ const launch = async () => {
         waitUntil: 'domcontentloaded',
     });
 
-    if (page.url() == "https://learn.zybooks.com/signin") {
+    if (page.url() == 'https://learn.zybooks.com/signin') {
         try {
             await page.type('#ember8', EMAIL || '');
             await page.type('#ember10', PASSWORD || '');
             await page.click('.flex-1 > button');
-        }
-        catch(e) {
+        } catch (e) {
             log.err(e);
         }
     }

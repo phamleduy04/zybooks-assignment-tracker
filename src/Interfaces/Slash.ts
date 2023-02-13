@@ -8,4 +8,4 @@ interface Run {
 export type Slash = ApplicationCommandData & {
     name: string;
     run: Run;
-}
+};
