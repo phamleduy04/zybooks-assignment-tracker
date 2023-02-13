@@ -1,9 +1,0 @@
-version: '3.6'
-
-services:
-  zybooks-bot:
-    image: ghcr.io/phamleduy04/zybooks-assignment-tracker:alpine
-    container_name: zybooks-assignment-tracker-bot
-    restart: always
-    env_file:
-      - .env

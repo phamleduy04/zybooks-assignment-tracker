@@ -1,0 +1,28 @@
+version: '3.6'
+
+services:
+  zybooks-bot:
+    image: ghcr.io/phamleduy04/zybooks-assignment-tracker:alpine
+    container_name: zybooks-assignment-tracker-bot
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    environment:
+      MONGODB: mongodb://mongo:27017/zybooks
+    networks:
+      - zybooks-bot
+  mongo:
+    image: mongo:4.2
+    container_name: zybooks-assignment-tracker-db
+    restart: unless-stopped
+    networks:
+      - zybooks-bot
+    volumes:
+      - ./mongod.conf:/etc/mongod.conf
+    command: ["-f", "/etc/mongod.conf"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+networks:
+  telegram-bot:

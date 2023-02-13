@@ -4,6 +4,7 @@ import RandomUserAgent from 'puppeteer-extra-plugin-anonymize-ua';
 import { executablePath, Browser, Page } from 'puppeteer';
 import 'dotenv/config';
 import * as cheerio from 'cheerio';
+import * as log from '../Log';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -60,7 +61,7 @@ const launch = async () => {
             await page.click('.flex-1 > button');
         }
         catch(e) {
-            console.error(e);
+            log.err(e);
         }
     }
 

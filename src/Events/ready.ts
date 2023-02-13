@@ -4,6 +4,9 @@ import * as broswer from '../Browser';
 import { EmbedBuilder, ChannelType, ButtonBuilder, ActionRowBuilder, ButtonStyle } from 'discord.js';
 import dayjs from 'dayjs';
 import _ from 'lodash';
+import * as log from '../Log';
+import db from '../Database';
+
 import type { Assignment } from '../Browser';
 import type { Page } from 'puppeteer';
 
@@ -13,25 +16,26 @@ let AssignmentCache: Assignment[] = [];
 export const event: Event = {
     name: 'ready',
     run: async (client: Client) => {
-        console.log(`Bot ${client.user?.tag} is ready!`);
-        console.log('Launching browser...');
+        log.info(`Bot ${client.user?.tag} is ready!`);
+        log.info('Launching browser...');
         const page = await broswer.launch();
-        console.log('Browser launched!');
+        log.info('Browser launched!');
         await fetchAssignments(client, page);
     }
 }
 
 async function fetchAssignments(client: Client, page: Page) {
-    console.log('Fetching assignments...');
+    log.info('Fetching assignments...');
+    const AssignmentCache = await db.get('zybooks') || [];
     const assignments = (await broswer.getAssignmentData(page)).filter(assignment => assignment.due > dayjs().unix());
     if (!_.isEqual(assignments, AssignmentCache)) await sendAssignments(client, assignments);
-    AssignmentCache = assignments;
+    await db.set('zybooks', assignments);
     setInterval(() => fetchAssignments(client, page), 1000 * 60 * 10);
 }
 
 async function sendAssignments(client: Client, assignment: Assignment[]) {
     const channel = await client.channels.fetch(process.env.NOTIFICATION_CHANNEL_ID || '');
-    if (!channel || channel.type !== ChannelType.GuildText) return console.error('Channel not found or not GuildText!');
+    if (!channel || channel.type !== ChannelType.GuildText) return log.err('Channel not found or not GuildText!');
     const messages = await channel.messages.fetch();
     await channel.bulkDelete(messages);
     const button = new ButtonBuilder()

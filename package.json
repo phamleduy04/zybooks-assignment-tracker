@@ -19,10 +19,13 @@
   },
   "homepage": "https://github.com/phamleduy04/zybooks-assignment-tracker#readme",
   "dependencies": {
+    "@keyv/mongo": "^2.1.8",
     "cheerio": "1.0.0-rc.12",
+    "colorette": "^2.0.19",
     "dayjs": "^1.11.7",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
+    "keyv": "^4.5.2",
     "lodash": "^4.17.21",
     "puppeteer": "^19.6.3",
     "puppeteer-extra": "^3.3.4",
