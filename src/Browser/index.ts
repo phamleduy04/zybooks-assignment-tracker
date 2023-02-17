@@ -62,8 +62,8 @@ const launch = async () => {
 
     if (page.url() == 'https://learn.zybooks.com/signin') {
         try {
-            await page.type('#ember8', EMAIL || '');
-            await page.type('#ember10', PASSWORD || '');
+            await page.type('input[type=email]', EMAIL || '');
+            await page.type('input[type=password]', PASSWORD || '');
             await page.click('.flex-1 > button');
         } catch (e) {
             log.err(e);
