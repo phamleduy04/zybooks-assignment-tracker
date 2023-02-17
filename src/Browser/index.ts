@@ -26,18 +26,24 @@ interface Assignment {
 
 const getAssignmentData = async (page: Page) => {
     const assignments: Assignment[] = [];
-    await page.waitForSelector('.assignment-title');
+    try {
+        await page.waitForSelector('.assignment-title');
 
-    const $ = cheerio.load(await page.content());
-    $('.assignment-summary').each((i, el) => {
-        const assignment = cheerio.load(el);
+        const $ = cheerio.load(await page.content());
+        $('.assignment-summary').each((i, el) => {
+            const assignment = cheerio.load(el);
 
-        const title = assignment('.assignment-title').text().trim();
-        const due = dayjs(assignment('.due-date-text').text().trim().split('Due: ')[1]).unix();
+            const title = assignment('.assignment-title').text().trim();
+            const due = dayjs(assignment('.due-date-text').text().trim().split('Due: ')[1]).unix();
 
-        assignments.push({ title, due });
-    });
+            assignments.push({ title, due });
+        });
+    }
+    catch (e) {
+        log.err(e);
+    }
     return assignments;
+    
 };
 
 const launch = async () => {

@@ -32,4 +32,5 @@ RUN apt-get update && apt-get install gnupg wget -y && \
 
 COPY --from=ts-remover /home/container ./
 USER 1000
+RUN mkdir cache
 CMD ["node", "Bot.js"]

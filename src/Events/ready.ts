@@ -25,9 +25,12 @@ async function fetchAssignments(client: Client, page: Page) {
     log.info('Fetching assignments...');
     const AssignmentCache = (await db.get('zybooks')) || [];
     const assignments = (await broswer.getAssignmentData(page)).filter((assignment) => assignment.due > dayjs().unix());
-    if (!_.isEqual(assignments, AssignmentCache)) await sendAssignments(client, assignments);
+    if (assignments.length != 0 && !_.isEqual(assignments, AssignmentCache)) await sendAssignments(client, assignments);
     await db.set('zybooks', assignments);
-    setInterval(() => fetchAssignments(client, page), 1000 * 60 * 10);
+    setInterval(async () => {
+        await page.reload();
+        await fetchAssignments(client, page)
+    }, 1000 * 60 * 10);
 }
 
 async function sendAssignments(client: Client, assignment: Assignment[]) {
