@@ -17,8 +17,14 @@ services:
     image: docker.io/bitnami/mongodb:4.4
     container_name: zybooks-assignment-tracker-db
     restart: unless-stopped
+    volumes:
+      - 'mongodb_data:/bitnami/mongodb'
     networks:
       - zybooks-bot
 
 networks:
   zybooks-bot:
+
+volumes:
+  mongodb_data:
+    driver: local

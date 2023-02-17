@@ -25,6 +25,7 @@ async function fetchAssignments(client: Client, page: Page) {
     log.info('Fetching assignments...');
     const AssignmentCache = (await db.get('zybooks')) || [];
     const assignments = (await broswer.getAssignmentData(page)).filter((assignment) => assignment.due > dayjs().unix());
+    console.log(assignments);
     if (assignments.length != 0 && !_.isEqual(assignments, AssignmentCache)) await sendAssignments(client, assignments);
     await db.set('zybooks', assignments);
     setInterval(async () => {
