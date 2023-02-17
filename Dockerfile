@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install gnupg wget -y && \
     apt-get install google-chrome-stable -y --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*
 
-RUN mkdir /cache
+RUN mkdir /home/container/cache
 COPY --from=ts-remover /home/container ./
 USER 1000
 CMD ["node", "Bot.js"]
