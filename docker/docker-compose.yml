@@ -9,20 +9,16 @@ services:
       - ../.env
     environment:
       MONGODB: mongodb://root:example@mongo:27017/zybooks
+    depends_on:
+      - mongo
     networks:
       - zybooks-bot
   mongo:
-    image: mongo:4.2
+    image: docker.io/bitnami/mongodb:4.4
     container_name: zybooks-assignment-tracker-db
     restart: unless-stopped
     networks:
       - zybooks-bot
-    volumes:
-      - ./mongod.conf:/etc/mongod.conf
-    command: ["-f", "/etc/mongod.conf"]
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
 
 networks:
   zybooks-bot:
