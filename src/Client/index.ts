@@ -29,7 +29,7 @@ class Bot extends Client {
             this.on(event.name, event.run.bind(null, this));
         });
 
-        // // Command Handler
+        // Command Handler
         // const commandPath = path.join(__dirname, '..', 'Commands');
         // readdirSync(commandPath).forEach(dir => {
         //     const commands = readdirSync(`${commandPath}/${dir}`).filter(file => file.endsWith('.js') || file.endsWith('.ts'));
@@ -45,7 +45,7 @@ class Bot extends Client {
         //     })
         // });
 
-        // // Slash Handler
+        // Slash Handler
         // const slashCommands: Slash[] = [];
         // const slashPath = path.join(__dirname, '..', 'Slash');
         // readdirSync(slashPath).forEach(dir => {

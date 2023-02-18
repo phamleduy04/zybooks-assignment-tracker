@@ -38,12 +38,10 @@ const getAssignmentData = async (page: Page) => {
 
             assignments.push({ title, due });
         });
-    }
-    catch (e) {
+    } catch (e) {
         log.err(e);
     }
     return assignments;
-    
 };
 
 const launch = async () => {

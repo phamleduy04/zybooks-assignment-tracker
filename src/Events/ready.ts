@@ -25,12 +25,11 @@ async function fetchAssignments(client: Client, page: Page) {
     log.info('Fetching assignments...');
     const AssignmentCache = (await db.get('zybooks')) || [];
     const assignments = (await broswer.getAssignmentData(page)).filter((assignment) => assignment.due > dayjs().unix());
-    console.log(assignments);
     if (assignments.length != 0 && !_.isEqual(assignments, AssignmentCache)) await sendAssignments(client, assignments);
     await db.set('zybooks', assignments);
-    setInterval(async () => {
+    setTimeout(async () => {
         await page.reload();
-        await fetchAssignments(client, page)
+        await fetchAssignments(client, page);
     }, 1000 * 60 * 10);
 }
 
@@ -38,7 +37,7 @@ async function sendAssignments(client: Client, assignment: Assignment[]) {
     const channel = await client.channels.fetch(process.env.NOTIFICATION_CHANNEL_ID || '');
     if (!channel || channel.type !== ChannelType.GuildText) return log.err('Channel not found or not GuildText!');
     const messages = await channel.messages.fetch();
-    await channel.bulkDelete(messages);
+    await channel.bulkDelete(messages).catch(() => null);
     const button = new ButtonBuilder()
         .setStyle(ButtonStyle.Link)
         .setURL(process.env.URL || 'https://discord.com')
