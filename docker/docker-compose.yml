@@ -1,30 +1,25 @@
 version: '3.6'
 
 services:
-  zybooks-bot:
+  zybooks-assignment-tracker:
     image: ghcr.io/phamleduy04/zybooks-assignment-tracker:alpine
     container_name: zybooks-assignment-tracker-bot
     restart: unless-stopped
     env_file:
       - ../.env
     environment:
-      MONGODB: mongodb://mongo:27017/zybooks
+      DATABASE_URL: etcd://zybooks-assignment-tracker-db:2379
     depends_on:
-      - mongo
-    networks:
-      - zybooks-bot
-  mongo:
-    image: docker.io/bitnami/mongodb:4.4
+      - zybooks-assignment-tracker-db
+  zybooks-assignment-tracker-db:
+    image: docker.io/bitnami/etcd:3.4
     container_name: zybooks-assignment-tracker-db
-    restart: unless-stopped
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
     volumes:
-      - 'mongodb_data:/bitnami/mongodb'
-    networks:
-      - zybooks-bot
-
-networks:
-  zybooks-bot:
+      - link-grabber-bot-db:/bitnami/etcd
+    restart: unless-stopped
 
 volumes:
-  mongodb_data:
+  zybooks-assignment-tracker-db:
     driver: local
