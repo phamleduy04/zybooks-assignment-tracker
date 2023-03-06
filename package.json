@@ -1,6 +1,6 @@
 {
   "name": "zybooks-assignment-tracker",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Zybooks assignment tracker for Discord bot",
   "main": "dist/src/Bot.js",
   "scripts": {
@@ -20,7 +20,12 @@
   },
   "homepage": "https://github.com/phamleduy04/zybooks-assignment-tracker#readme",
   "dependencies": {
+    "@keyv/etcd": "^1.1.4",
     "@keyv/mongo": "^2.1.8",
+    "@keyv/mysql": "^1.6.1",
+    "@keyv/postgres": "^1.4.2",
+    "@keyv/redis": "^2.5.6",
+    "@keyv/sqlite": "^3.6.4",
     "cheerio": "1.0.0-rc.12",
     "colorette": "^2.0.19",
     "dayjs": "^1.11.7",
@@ -35,7 +40,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",
-    "@types/node": "^18.14.2",
+    "@types/node": "^18.14.6",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
     "eslint": "^8.35.0",
