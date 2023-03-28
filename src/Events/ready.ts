@@ -1,36 +1,28 @@
 import { Event } from '../Interfaces';
 import Client from '../Client';
-import * as broswer from '../Browser';
 import { EmbedBuilder, ChannelType, ButtonBuilder, ActionRowBuilder, ButtonStyle } from 'discord.js';
-import dayjs from 'dayjs';
 import _ from 'lodash';
 import * as log from '../Log';
 import db from '../Database';
+import { getAsignments } from '../Request';
 
-import type { Assignment } from '../Browser';
-import type { Page } from 'puppeteer';
+import type { Assignment } from '../Interfaces';
 
 export const event: Event = {
     name: 'ready',
     run: async (client: Client) => {
         log.info(`Bot ${client.user?.tag} is ready!`);
-        // log.info('Launching browser...');
-        // const page = await broswer.launch();
-        // log.info('Browser launched!');
-        // await fetchAssignments(client, page);
+        await fetchAssignments(client);
     },
 };
 
-async function fetchAssignments(client: Client, page: Page) {
+async function fetchAssignments(client: Client) {
     log.info('Fetching assignments...');
     const AssignmentCache = (await db.get('zybooks')) || [];
-    const assignments = (await broswer.getAssignmentData(page)).filter((assignment) => assignment.due > dayjs().unix());
+    const assignments = await getAsignments(client.zybookAuth.authToken);
     if (assignments.length != 0 && !_.isEqual(assignments, AssignmentCache)) await sendAssignments(client, assignments);
     await db.set('zybooks', assignments);
-    setTimeout(async () => {
-        await page.reload();
-        await fetchAssignments(client, page);
-    }, 1000 * 60 * 10);
+    setTimeout(async () => await fetchAssignments(client), 1000 * 60 * 10);
 }
 
 async function sendAssignments(client: Client, assignment: Assignment[]) {
@@ -40,7 +32,7 @@ async function sendAssignments(client: Client, assignment: Assignment[]) {
     await channel.bulkDelete(messages).catch(() => null);
     const button = new ButtonBuilder()
         .setStyle(ButtonStyle.Link)
-        .setURL(process.env.URL || 'https://discord.com')
+        .setURL(process.env.CLASSCODE ? `https://learn.zybooks.com/zybook/${process.env.CLASSCODE}` : 'https://learn.zybooks.com')
         .setLabel('Go to ZyBooks');
     await channel.send({ embeds: getMultipleEmbeds(assignment), components: [new ActionRowBuilder<ButtonBuilder>().addComponents(button)], content: 'New ZyBooks Assignments!' });
 }
@@ -51,7 +43,8 @@ function getMultipleEmbeds(assignment: Assignment[]) {
         const embed = new EmbedBuilder().setTitle('ZyBooks Assignments');
         embed.addFields([
             { name: 'Assignment name', value: assignment[i].title },
-            { name: 'Due date', value: `<t:${assignment[i].due}:R>` },
+            { name: 'Due date', value: `<t:${assignment[i].dueDate}:R>` },
+            { name: 'Details', value: assignment[i].subTitle.join('\n') },
         ]);
         embeds.push(embed);
     }
