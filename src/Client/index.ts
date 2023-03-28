@@ -3,9 +3,8 @@ import 'dotenv/config';
 import type { Command, Event, Slash, ZybookAuth } from '../Interfaces';
 import path from 'path';
 import { readdirSync } from 'fs';
-import { getAuthToken, refreshToken, getAsignments } from '../Request';
+import { getAuthToken, refreshToken } from '../Request';
 import dayjs from 'dayjs';
-import fs from 'fs';
 
 class Bot extends Client {
     public commands: Collection<string, Command> = new Collection();
@@ -37,8 +36,6 @@ class Bot extends Client {
             this.events.set(event.name, event);
             this.on(event.name, event.run.bind(null, this));
         });
-        const assignments = await getAsignments(this.zybookAuth.authToken);
-        fs.writeFileSync('assignments.json', JSON.stringify(assignments, null, 4));
     }
 
     public async getAuth(): Promise<void> {
