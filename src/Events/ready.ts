@@ -14,10 +14,10 @@ export const event: Event = {
     name: 'ready',
     run: async (client: Client) => {
         log.info(`Bot ${client.user?.tag} is ready!`);
-        log.info('Launching browser...');
-        const page = await broswer.launch();
-        log.info('Browser launched!');
-        await fetchAssignments(client, page);
+        // log.info('Launching browser...');
+        // const page = await broswer.launch();
+        // log.info('Browser launched!');
+        // await fetchAssignments(client, page);
     },
 };
 
