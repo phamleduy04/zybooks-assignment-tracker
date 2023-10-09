@@ -43,7 +43,7 @@ class Bot extends Client {
         this.zybookAuth = await getAuthToken();
         const timeUntil = (this.zybookAuth.expiryDate?.unix() - dayjs().unix()) * 1000 || 10 * 60 * 1000;
         console.log(`Next auth refresh in ${timeUntil / 1000} seconds`);
-        setTimeout(() => this.getAuth(), timeUntil);
+        setTimeout(() => this.getAuth(), timeUntil - 1000 * 10);
     }
 }
 
